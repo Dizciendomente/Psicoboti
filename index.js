@@ -7,6 +7,8 @@ app.use(express.json());
 const token = process.env.WHATSAPP_TOKEN;
 const phoneNumberId = process.env.PHONE_NUMBER_ID;
 
+app.get("/", (req,res)=> res.send("Bot alive"));
+
 app.get("/webhook", (req, res) => {
   const verify_token = "psicoboti123";
   const mode = req.query["hub.mode"];
@@ -14,16 +16,24 @@ app.get("/webhook", (req, res) => {
   const token_sent = req.query["hub.verify_token"];
 
   if (mode === "subscribe" && token_sent === verify_token) {
-    res.status(200).send(challenge);
-  } else {
-    res.sendStatus(403);
+    return res.status(200).send(challenge);
   }
+  return res.sendStatus(403);
 });
 
 app.post("/webhook", async (req, res) => {
-  const message = req.body.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
+  try {
+    console.log("Webhook recibido");
 
-  if (message) {
+    const entry = req.body.entry?.[0];
+    const changes = entry?.changes?.[0];
+    const value = changes?.value;
+    const message = value?.messages?.[0];
+
+    if (!message) {
+      return res.sendStatus(200);
+    }
+
     const from = message.from;
 
     await axios.post(
@@ -31,7 +41,7 @@ app.post("/webhook", async (req, res) => {
       {
         messaging_product: "whatsapp",
         to: from,
-        text: { body: "Hola 👋 Gracias por escribir. En breve te respondo." }
+        text: { body: "Hola 👋 Soy el asistente automático." }
       },
       {
         headers: {
@@ -40,9 +50,12 @@ app.post("/webhook", async (req, res) => {
         }
       }
     );
-  }
 
-  res.sendStatus(200);
+    res.sendStatus(200);
+  } catch (err) {
+    console.log(err.message);
+    res.sendStatus(200);
+  }
 });
 
 const PORT = process.env.PORT || 3000;
