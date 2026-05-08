@@ -9,7 +9,7 @@ const phoneNumberId = process.env.PHONE_NUMBER_ID;
 
 app.get("/", (req, res) => res.send("Bot alive"));
 
-/* 🔹 Verificación del webhook (Meta) */
+/* 🔹 Verificación webhook */
 app.get("/webhook", (req, res) => {
   const verify_token = "psicoboti123";
 
@@ -33,31 +33,42 @@ app.post("/webhook", async (req, res) => {
     const value = changes?.value;
     const message = value?.messages?.[0];
 
-    if (!message) {
-      return res.sendStatus(200);
-    }
+    if (!message) return res.sendStatus(200);
 
-    /* 👉 Número que envía el mensaje */
     let from = message.from;
-    console.log("Numero recibido:", from);
 
-    /* 🔥 Fix Argentina: 549 → +54 */
-    if (from.startsWith("549")) {
-      from = "+54" + from.slice(3);
-    } else {
-      from = "+" + from;
-    }
+    /* Fix Argentina */
+    if (from.startsWith("549")) from = "+54" + from.slice(3);
+    else from = "+" + from;
 
-    console.log("Numero convertido:", from);
-
-    /* 🔹 Enviar respuesta */
+    /* 🔹 MENÚ CON BOTONES */
     await axios.post(
       `https://graph.facebook.com/v18.0/${phoneNumberId}/messages`,
       {
         messaging_product: "whatsapp",
         to: from,
-        text: {
-          body: "Hola 👋 Soy el asistente automático de Psicobiti. ¿En qué puedo ayudarte?"
+        type: "interactive",
+        interactive: {
+          type: "button",
+          body: {
+            text: "Hola 👋 Soy el asistente automático de Psicobiti.\nElegí una opción:"
+          },
+          action: {
+            buttons: [
+              {
+                type: "reply",
+                reply: { id: "turnos", title: "Turnos" }
+              },
+              {
+                type: "reply",
+                reply: { id: "precios", title: "Precios" }
+              },
+              {
+                type: "reply",
+                reply: { id: "ubicacion", title: "Ubicación" }
+              }
+            ]
+          }
         }
       },
       {
