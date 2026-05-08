@@ -1,16 +1,18 @@
 const express = require("express");
 const axios = require("axios");
-const app = express();
 
+const app = express();
 app.use(express.json());
 
 const token = process.env.WHATSAPP_TOKEN;
 const phoneNumberId = process.env.PHONE_NUMBER_ID;
 
-app.get("/", (req,res)=> res.send("Bot alive"));
+app.get("/", (req, res) => res.send("Bot alive"));
 
+/* 🔹 Verificación del webhook (Meta) */
 app.get("/webhook", (req, res) => {
   const verify_token = "psicoboti123";
+
   const mode = req.query["hub.mode"];
   const challenge = req.query["hub.challenge"];
   const token_sent = req.query["hub.verify_token"];
@@ -21,6 +23,7 @@ app.get("/webhook", (req, res) => {
   return res.sendStatus(403);
 });
 
+/* 🔹 Recepción de mensajes */
 app.post("/webhook", async (req, res) => {
   try {
     console.log("Webhook recibido");
@@ -28,28 +31,33 @@ app.post("/webhook", async (req, res) => {
     const entry = req.body.entry?.[0];
     const changes = entry?.changes?.[0];
     const value = changes?.value;
+    const message = value?.messages?.[0];
 
-    if (!value?.messages) {
+    if (!message) {
       return res.sendStatus(200);
     }
 
-    const message = value.messages[0];
+    /* 👉 Número que envía el mensaje */
+    let from = message.from;
+    console.log("Numero recibido:", from);
 
-    if (message.from === phoneNumberId) {
-      return res.sendStatus(200);
+    /* 🔥 Fix Argentina: 549 → +54 */
+    if (from.startsWith("549")) {
+      from = "+54" + from.slice(3);
+    } else {
+      from = "+" + from;
     }
 
-    const from = "+" + message.from;
-    console.log("NUMERO QUE ESCRIBIÓ:", from);
+    console.log("Numero convertido:", from);
 
+    /* 🔹 Enviar respuesta */
     await axios.post(
       `https://graph.facebook.com/v18.0/${phoneNumberId}/messages`,
       {
         messaging_product: "whatsapp",
         to: from,
-        type: "text",
         text: {
-          body: "Hola 👋 Soy el asistente automático."
+          body: "Hola 👋 Soy el asistente automático de Psicobiti. ¿En qué puedo ayudarte?"
         }
       },
       {
