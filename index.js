@@ -28,9 +28,14 @@ app.post("/webhook", async (req, res) => {
     const entry = req.body.entry?.[0];
     const changes = entry?.changes?.[0];
     const value = changes?.value;
-    const message = value?.messages?.[0];
 
-    if (!message) {
+    if (!value?.messages) {
+      return res.sendStatus(200);
+    }
+
+    const message = value.messages[0];
+
+    if (message.from === phoneNumberId) {
       return res.sendStatus(200);
     }
 
@@ -41,7 +46,10 @@ app.post("/webhook", async (req, res) => {
       {
         messaging_product: "whatsapp",
         to: from,
-        text: { body: "Hola 👋 Soy el asistente automático." }
+        type: "text",
+        text: {
+          body: "Hola 👋 Soy el asistente automático."
+        }
       },
       {
         headers: {
@@ -53,7 +61,7 @@ app.post("/webhook", async (req, res) => {
 
     res.sendStatus(200);
   } catch (err) {
-    console.log(err.message);
+    console.log("ERROR META:", err.response?.data || err.message);
     res.sendStatus(200);
   }
 });
