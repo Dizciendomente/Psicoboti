@@ -9,7 +9,7 @@ const phoneNumberId = process.env.PHONE_NUMBER_ID;
 
 app.get("/", (req, res) => res.send("Bot alive"));
 
-/* Verificación webhook */
+/* 🔹 Verificación del webhook (Meta) */
 app.get("/webhook", (req, res) => {
   const verify_token = "psicoboti123";
 
@@ -23,7 +23,7 @@ app.get("/webhook", (req, res) => {
   return res.sendStatus(403);
 });
 
-/* Webhook mensajes */
+/* 🔹 Recepción de mensajes */
 app.post("/webhook", async (req, res) => {
   try {
     console.log("Webhook recibido");
@@ -33,55 +33,44 @@ app.post("/webhook", async (req, res) => {
     const value = changes?.value;
     const message = value?.messages?.[0];
 
-    if (!message) return res.sendStatus(200);
+    if (!message) {
+      return res.sendStatus(200);
+    }
 
-    /* Numero del usuario */
+    /* 👉 Número que envía el mensaje */
     let from = message.from;
-    if (from.startsWith("549")) from = "+54" + from.slice(3);
-    else from = "+" + from;
+    console.log("Numero recibido:", from);
 
-    /* Detectar texto recibido */
-    const text = message.text?.body?.toLowerCase() || "";
+    /* 🔥 Fix Argentina: 549 → +54 */
+    if (from.startsWith("549")) {
+      from = "+54" + from.slice(3);
+    } else {
+      from = "+" + from;
+    }
 
-    /* FUNCION PARA ENVIAR MENSAJES */
-    const sendMessage = async (data) => {
-      await axios.post(
-        `https://graph.facebook.com/v18.0/${phoneNumberId}/messages`,
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json"
-          }
-        }
-      );
-    };
+    console.log("Numero convertido:", from);
 
-    /* 👉 Si escriben hola → enviar BOTONES */
-    if (text.includes("hola")) {
-      await sendMessage({
+    /* 🔹 Enviar respuesta */
+    await axios.post(
+      `https://graph.facebook.com/v18.0/${phoneNumberId}/messages`,
+      {
         messaging_product: "whatsapp",
         to: from,
-        type: "interactive",
-        interactive: {
-          type: "button",
-          body: {
-            text: "Hola 👋 Soy el asistente automático de Psicobiti.\nElegí una opción:"
-          },
-          action: {
-            buttons: [
-              { type: "reply", reply: { id: "turnos", title: "Turnos" } },
-              { type: "reply", reply: { id: "precios", title: "Precios" } },
-              { type: "reply", reply: { id: "ubicacion", title: "Ubicación" } }
-            ]
-          }
+        text: {
+          body: "Hola 👋 Soy el asistente automático de Psicobiti. ¿En qué puedo ayudarte?"
         }
-      });
-    }
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      }
+    );
 
     res.sendStatus(200);
   } catch (err) {
-    console.log("ERROR:", err.response?.data || err.message);
+    console.log("ERROR META:", err.response?.data || err.message);
     res.sendStatus(200);
   }
 });
