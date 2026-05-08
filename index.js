@@ -40,6 +40,7 @@ app.post("/webhook", async (req, res) => {
     }
 
     const from = message.from;
+    console.log("NUMERO QUE ESCRIBIÓ:", from);
 
     await axios.post(
       `https://graph.facebook.com/v18.0/${phoneNumberId}/messages`,
