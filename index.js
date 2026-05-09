@@ -7,211 +7,247 @@ app.use(express.json());
 const token = process.env.WHATSAPP_TOKEN;
 const phoneNumberId = process.env.PHONE_NUMBER_ID;
 
-const userState = {};
+app.get("/", (req, res) => res.send("Bot alive"));
 
-async function sendMessage(data){
-  await axios.post(
+/* VERIFICACION WEBHOOK */
+app.get("/webhook", (req, res) => {
+  const verify_token = "psicoboti123";
+
+  const mode = req.query["hub.mode"];
+  const challenge = req.query["hub.challenge"];
+  const token_sent = req.query["hub.verify_token"];
+
+  if (mode === "subscribe" && token_sent === verify_token) {
+    return res.status(200).send(challenge);
+  }
+  return res.sendStatus(403);
+});
+
+/* FUNCION ENVIAR */
+async function sendMessage(body) {
+  return axios.post(
     `https://graph.facebook.com/v18.0/${phoneNumberId}/messages`,
-    data,
+    body,
     {
-      headers:{
-        Authorization:`Bearer ${token}`,
-        "Content-Type":"application/json"
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
       }
     }
   );
 }
 
-/* ===== MENU PRINCIPAL ===== */
-async function sendMainMenu(to){
+/* MENU PRINCIPAL */
+async function sendMainMenu(to) {
   await sendMessage({
-    messaging_product:"whatsapp",
+    messaging_product: "whatsapp",
     to,
-    type:"interactive",
-    interactive:{
-      type:"button",
-      body:{
-        text:`Hola 😊 Soy el asistente de Psicoboti.
-
+    type: "interactive",
+    interactive: {
+      type: "button",
+      body: {
+        text:
+`Hola 😊 Soy el asistente de Psicoboti.
 Puedo ayudarte con información o con la reserva de tu primera sesión.`
       },
-      action:{
-        buttons:[
-          {type:"reply", reply:{id:"turno", title:"Reservar turno"}},
-          {type:"reply", reply:{id:"honorarios", title:"Honorarios"}},
-          {type:"reply", reply:{id:"modalidad", title:"Modalidades"}},
-          {type:"reply", reply:{id:"menu", title:"Menú"}}
+      action: {
+        buttons: [
+          { type: "reply", reply: { id: "turno", title: "Reservar turno" } },
+          { type: "reply", reply: { id: "honorarios", title: "Honorarios" } },
+          { type: "reply", reply: { id: "modalidad", title: "Modalidades" } }
         ]
       }
     }
   });
 }
 
-/* ===== LISTA DE HORARIOS (BOTONES GRANDES) ===== */
-async function sendHorarios(to){
+/* BOTON VOLVER */
+async function volverMenu(to){
   await sendMessage({
-    messaging_product:"whatsapp",
+    messaging_product: "whatsapp",
     to,
-    type:"interactive",
+    type: "interactive",
     interactive:{
-      type:"list",
-      body:{
-        text:`Elegí el horario disponible que prefieras 😊
-
-Duración de sesión: 40 a 45 min`
-      },
-      action:{
-        button:"Ver horarios",
-        sections:[
-          {
-            title:"Disponibles",
-            rows:[
-              {id:"lun16", title:"Lunes 16hs (Monte Grande)"},
-              {id:"mie17", title:"Miércoles 17hs (Monte Grande)"},
-              {id:"jue16", title:"Jueves 16hs (9 de Abril)"},
-              {id:"jue17", title:"Jueves 17hs (9 de Abril)"},
-              {id:"mar10", title:"Martes 10hs (Virtual)"},
-              {id:"mar14", title:"Martes 14hs (Virtual)"},
-              {id:"mar15", title:"Martes 15hs (Virtual)"}
-            ]
-          }
-        ]
-      }
+      type:"button",
+      body:{ text:"¿Querés volver al menú principal?" },
+      action:{ buttons:[
+        { type:"reply", reply:{ id:"menu", title:"Menú principal"}}
+      ]}
     }
-  });
+  })
 }
 
-app.get("/", (req,res)=> res.send("Bot alive"));
+/* WEBHOOK */
+app.post("/webhook", async (req, res) => {
+  try {
+    const entry = req.body.entry?.[0];
+    const changes = entry?.changes?.[0];
+    const value = changes?.value;
+    const message = value?.messages?.[0];
+    if (!message) return res.sendStatus(200);
 
-/* ===== VERIFICACION WEBHOOK ===== */
-app.get("/webhook",(req,res)=>{
-  const verify_token="psicoboti123";
-  if(req.query["hub.verify_token"]===verify_token){
-    return res.send(req.query["hub.challenge"]);
-  }
-  res.sendStatus(403);
-});
+    let from = message.from;
+    if (from.startsWith("549")) from = "+54" + from.slice(3);
+    else from = "+" + from;
 
-/* ===== RECEPCION MENSAJES ===== */
-app.post("/webhook", async(req,res)=>{
-  try{
-    const message=req.body.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
-    if(!message) return res.sendStatus(200);
+    const btn = message?.interactive?.button_reply?.id;
+    const text = message?.text?.body;
 
-    let from=message.from;
-    if(from.startsWith("549")) from="+54"+from.slice(3);
-    else from="+"+from;
-
-    /* ===== SI ENVIA IMAGEN (COMPROBANTE) ===== */
-    if(message.type==="image"){
-      await sendMessage({
-        messaging_product:"whatsapp",
-        to:from,
-        text:{
-          body:`¡Comprobante recibido! 😊
-
-Tu turno quedó reservado de forma provisoria.
-En breve recibirás la confirmación final con los datos del encuentro.`
-        }
-      });
-
+    if (text) {
       await sendMainMenu(from);
       return res.sendStatus(200);
     }
 
-    /* ===== RESPUESTA A BOTONES ===== */
-    if(message.type==="interactive"){
-      const buttonId = message.interactive.button_reply?.id || message.interactive.list_reply?.id;
-
-      if(buttonId==="menu"){
-        userState[from]=null;
-        await sendMainMenu(from);
-        return res.sendStatus(200);
-      }
-
-      if(buttonId==="modalidad"){
-        await sendMessage({
-          messaging_product:"whatsapp",
-          to:from,
-          text:{
-            body:`Se brinda atención a adolescentes (15+) y adultos.
-
-Modalidades disponibles:
-• Virtual → Martes
-• Presencial → Monte Grande y 9 de Abril`
-          }
-        });
-        await sendMainMenu(from);
-        return res.sendStatus(200);
-      }
-
-      if(buttonId==="honorarios"){
-        await sendMessage({
-          messaging_product:"whatsapp",
-          to:from,
-          text:{
-            body:`El valor de la sesión es de $37.000.
-
-La seña para reservar es del 50%.
-Alias: dizciendomente.psi`
-          }
-        });
-        await sendMainMenu(from);
-        return res.sendStatus(200);
-      }
-
-      if(buttonId==="turno"){
-        await sendHorarios(from);
-        userState[from]="esperando_datos";
-        return res.sendStatus(200);
-      }
-
-      /* ===== CUANDO ELIGE HORARIO ===== */
-      if(userState[from]==="esperando_datos"){
-        await sendMessage({
-          messaging_product:"whatsapp",
-          to:from,
-          text:{
-            body:`Perfecto 😊
-
-Para confirmar el turno necesito:
-• Nombre y apellido
-• Edad
-• Motivo de consulta`
-          }
-        });
-        userState[from]="esperando_datos_personales";
-        return res.sendStatus(200);
-      }
+    if (btn === "menu") {
+      await sendMainMenu(from);
     }
 
-    /* ===== CUANDO ENVIA DATOS PERSONALES ===== */
-    if(userState[from]==="esperando_datos_personales"){
+    /* RESERVAR TURNO */
+    if (btn === "turno") {
       await sendMessage({
         messaging_product:"whatsapp",
         to:from,
-        text:{
-          body:`Gracias 😊
+        type:"interactive",
+        interactive:{
+          type:"button",
+          body:{ text:
+`Las sesiones tienen una duración aproximada de 40 a 45 minutos.
+Trabajamos con un espacio cuidado y personalizado para cada proceso.
 
-Para reservar el turno enviá la seña del 50% al alias:
-dizciendomente.psi
-
-Luego enviá el comprobante por aquí.`
+Elegí la modalidad:`},
+          action:{buttons:[
+            { type:"reply", reply:{ id:"virtual", title:"Sesión virtual"} },
+            { type:"reply", reply:{ id:"presencial", title:"Sesión presencial"} }
+          ]}
         }
       });
-
-      userState[from]="esperando_comprobante";
-      return res.sendStatus(200);
     }
 
-    /* ===== MENSAJE INICIAL ===== */
-    await sendMainMenu(from);
-    res.sendStatus(200);
+    /* VIRTUAL */
+    if (btn === "virtual") {
+      await sendMessage({
+        messaging_product:"whatsapp",
+        to:from,
+        type:"interactive",
+        interactive:{
+          type:"button",
+          body:{ text:"Turnos virtuales disponibles (martes):" },
+          action:{buttons:[
+            { type:"reply", reply:{ id:"v10", title:"10:00"} },
+            { type:"reply", reply:{ id:"v14", title:"14:00"} },
+            { type:"reply", reply:{ id:"v15", title:"15:00"} }
+          ]}
+        }
+      });
+    }
 
-  }catch(err){
+    /* PRESENCIAL */
+    if (btn === "presencial") {
+      await sendMessage({
+        messaging_product:"whatsapp",
+        to:from,
+        type:"interactive",
+        interactive:{
+          type:"button",
+          body:{ text:"Elegí el consultorio:" },
+          action:{buttons:[
+            { type:"reply", reply:{ id:"mg", title:"Monte Grande"} },
+            { type:"reply", reply:{ id:"abril", title:"9 de Abril"} }
+          ]}
+        }
+      });
+    }
+
+    if (btn === "mg") {
+      await sendMessage({
+        messaging_product:"whatsapp",
+        to:from,
+        type:"interactive",
+        interactive:{
+          type:"button",
+          body:{ text:"Consultorio Monte Grande – Las Heras 557" },
+          action:{buttons:[
+            { type:"reply", reply:{ id:"l16", title:"Lunes 16:00"} },
+            { type:"reply", reply:{ id:"m17", title:"Miércoles 17:00"} }
+          ]}
+        }
+      });
+    }
+
+    if (btn === "abril") {
+      await sendMessage({
+        messaging_product:"whatsapp",
+        to:from,
+        type:"interactive",
+        interactive:{
+          type:"button",
+          body:{ text:"Consultorio 9 de Abril – Restelli 1159 B" },
+          action:{buttons:[
+            { type:"reply", reply:{ id:"j16", title:"Jueves 16:00"} },
+            { type:"reply", reply:{ id:"j17", title:"Jueves 17:00"} }
+          ]}
+        }
+      });
+    }
+
+    const horarios = ["v10","v14","v15","l16","m17","j16","j17"];
+    if (horarios.includes(btn)) {
+      await sendMessage({
+        messaging_product:"whatsapp",
+        to:from,
+        text:{ body:
+`✨ Para confirmar el turno se solicita una seña del 50% ($18.500).
+
+Alias: dizciendomente.psi
+
+Luego enviá:
+• Nombre y apellido  
+• Edad  
+• Motivo de consulta  
+• Comprobante de transferencia  
+
+Una vez recibido, el turno queda confirmado.`}
+      });
+      await volverMenu(from);
+    }
+
+    /* HONORARIOS */
+    if (btn === "honorarios") {
+      await sendMessage({
+        messaging_product:"whatsapp",
+        to:from,
+        text:{ body:
+`El valor de la sesión es de $37.000.
+
+Se trata de un espacio individual, confidencial y personalizado, orientado a generar cambios reales y sostenibles en el tiempo.
+
+La reserva del turno se realiza con una seña del 50%.`}
+      });
+      await volverMenu(from);
+    }
+
+    /* MODALIDAD */
+    if (btn === "modalidad") {
+      await sendMessage({
+        messaging_product:"whatsapp",
+        to:from,
+        text:{ body:
+`Se brinda atención psicológica a adolescentes (15+) y adultos.
+
+Modalidad virtual: martes.
+Modalidad presencial:
+• Monte Grande (lunes y miércoles)
+• 9 de Abril (jueves)`}
+      });
+      await volverMenu(from);
+    }
+
+    res.sendStatus(200);
+  } catch (err) {
     console.log(err.response?.data || err.message);
     res.sendStatus(200);
   }
 });
 
-app.listen(process.env.PORT || 3000);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log("Server running"));
