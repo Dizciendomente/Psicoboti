@@ -184,7 +184,8 @@ if (btn === "nuevo") {
     interactive: {
       type: "button",
       body: {
-        text: "Podés elegir una opción para continuar 👇🏼"
+        text: `Gracias por escribir 😊
+          Podés elegir una opción para continuar 👇🏼`
       },
       action: {
         buttons: [
