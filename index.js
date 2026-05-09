@@ -83,6 +83,28 @@ Podés elegir una opción para continuar 👇🏼`
   });
 }
 
+/* NUEVO MENU */
+async function sendMenuNuevo(to) {
+  await sendMessage({
+    messaging_product: "whatsapp",
+    to,
+    type: "interactive",
+    interactive: {
+      type: "button",
+      body: {
+        text: "Podés elegir una opción para continuar 👇🏼"
+      },
+      action: {
+        buttons: [
+          { type: "reply", reply: { id: "turno", title: "📅 Reservar turno" } },
+          { type: "reply", reply: { id: "modalidad", title: "✨ Modalidades" } },
+          { type: "reply", reply: { id: "otros", title: "➕ Otros temas" } }
+        ]
+      }
+    }
+  });
+}
+
 /* BOTON VOLVER */
 async function volverMenu(to){
   await sendMessage({
@@ -93,7 +115,7 @@ async function volverMenu(to){
       type:"button",
       body:{ text:"🔙 ¿Querés volver al menú principal?" },
       action:{ buttons:[
-        { type:"reply", reply:{ id:"menu", title:"↩️ Menú principal"}}
+        { type:"reply", reply:{ id:"menu_nuevo", title:"↩️ Menú principal"}}
       ]}
     }
   })
@@ -175,6 +197,9 @@ Voy a chequear el pago y en breve te confirmo el turno por este medio.
       await sendMainMenu(from);
     }
 
+    if (btn === "menu_nuevo") {
+  await sendMenuNuevo(from);
+}
     /* USUARIO NUEVO */
 if (btn === "nuevo") {
   await sendMessage({
