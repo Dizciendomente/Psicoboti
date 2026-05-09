@@ -63,9 +63,12 @@ async function sendMainMenu(to) {
       type: "button",
       body: {
         text:
-`✨ ¡Bienvenido/a a Dizciendomente Psicología! Ψ ✨
-Gracias por comunicarte😊 
+` ✨ ¡Bienvenido/a a Dizciendomente Psicología! Ψ ✨
+
+Gracias por comunicarte😊  
+
 Estoy acá para ayudarte con información y para coordinar tu primera sesión.
+
 Podés elegir una opción para continuar 👇🏼`
       },
       action: {
@@ -160,6 +163,7 @@ Si todo esta ok, ya queda confirmado!
           type:"button",
           body:{ text:
 `🔹Las sesiones tienen una duración aproximada de 40 a 45 minutos.
+
 🔹Es un espacio cuidado, pensado para acompañarte de forma personalizada en tu proceso.
 
 Podes elegir la modalidad 👇🏼`},
@@ -179,7 +183,8 @@ Podes elegir la modalidad 👇🏼`},
         interactive:{
           type:"button",
           body:{ text:
-            `💻Turnos virtuales - dias Martes:
+            `💻 Turnos virtuales - dias Martes:
+            
             Podés elegir el horario que mejor te quede👇🏼`
                },
           action:{buttons:[
@@ -275,13 +280,13 @@ Con esto el turno queda confirmado.`}
         messaging_product:"whatsapp",
         to:from,
         text:{ body:
-`🔹El valor de la sesión es de $37.000, que podés abonarlos por transferencia o en efectivo
+`💲 El valor de la sesión es de $37.000, que podés abonarlos por transferencia o en efectivo
 
-🔹La reserva del turno se realiza con una seña del 50% mediante transferencia.
+✔️ La reserva del turno se realiza con una seña del 50% mediante transferencia.
 
-🔹Es un espacio individual, confidencial y personalizado, orientado a generar cambios reales y sostenibles en el tiempo.
+      Es un espacio individual, confidencial y personalizado, orientado a generar cambios reales y sostenibles en el tiempo.
 
-🔹Para reservarlo volvé al menú principal.`
+↩️ Para reservarlo volvé al menú principal.`
              }
       });
       await volverMenu(from);
@@ -292,13 +297,13 @@ Con esto el turno queda confirmado.`}
         messaging_product:"whatsapp",
         to:from,
         text:{ body:
-`Modalidades de atención diponibles:.
+`✨Modalidades de atención diponibles:.
 
 • Virtual: días Martes.
 • Presencial Monte Grande: Lunes y Miércoles
 • Presencial 9 de Abril: Jueves
 
-Atención psicológica para adolescentes (15+) y adultos`
+✔️Atención psicológica para adolescentes (15+) y adultos`
              }
       });
       await volverMenu(from);
