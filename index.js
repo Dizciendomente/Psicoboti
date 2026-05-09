@@ -251,7 +251,7 @@ En breve te voy a estar respondiendo personalmente.`}
         interactive:{
           type:"button",
           body:{ text:
-`⏳ Las sesiones tienen una duración aproximada de 40 a 45 minutos. 
+`⏳ Las sesiones tienen una duración aproximada de *40 a 45 minutos*. 
 
 ✔️ Es un espacio cuidado, pensado para acompañarte de forma personalizada en tu proceso
 
@@ -271,7 +271,7 @@ Podés elegir la modalidad 👇🏼`},
         type:"interactive",
         interactive:{
           type:"button",
-          body:{ text:`💻 Turnos virtuales - días Martes
+          body:{ text:`💻 *Turnos virtuales* - días Martes
           \nPodés elegir el horario que mejor te quede! 👇🏼`},
           action:{buttons:[
             { type:"reply", reply:{ id:"v10", title:"📅 10:00 hs"} },
@@ -306,7 +306,7 @@ Podés elegir la modalidad 👇🏼`},
         interactive:{
           type:"button",
           body:{ text:
-            `🔹Espacio Retravallier
+            `🔹*Espacio Retravallier*
             Las Heras 557, Monte Grande
             \nElegí el día y horario disponible 👇🏼`},
           action:{buttons:[
@@ -325,7 +325,7 @@ Podés elegir la modalidad 👇🏼`},
         interactive:{
           type:"button",
           body:{ text:
-            `🔹Consultorio Restelli
+            `🔹*Consultorio Restelli*
             Restelli 1159 "B", Barrio 9 de Abril
             
             \nElegí el día y horario disponible 👇🏼`},
@@ -343,9 +343,9 @@ Podés elegir la modalidad 👇🏼`},
         messaging_product:"whatsapp",
         to:from,
         text:{ body:
-`✨ Para confirmar el turno se abona el 50% ($18.500)
+`✨ Para confirmar el turno se realiza una seña del *50% del valor de la sesión ($18.500)*
 
-Alias: dizciendomente.psi
+Alias: *dizciendomente.psi*
 
 Una vez realizado el pago, por favor enviá:
 • Nombre y apellido del paciente
@@ -364,11 +364,11 @@ Una vez realizado el pago, por favor enviá:
         messaging_product:"whatsapp",
         to:from,
         text:{ body:
-`💲 El valor de la sesión es de $37.000, que podés abonarlos por transferencia o en efectivo.
+`💲 El valor de la sesión es de *$37.000*, que podés abonarlos por *transferencia* o en *efectivo*.
 
-✔️ La reserva del turno se realiza con una seña del 50% mediante transferencia.
+✔️ La reserva del turno se realiza con una *seña del 50%* mediante transferencia.
 
-🫂 Es un espacio individual, confidencial y personalizado, orientado a generar cambios reales y sostenibles en el tiempo.`}
+🫂 Es un espacio *individual, confidencial y personalizado*, orientado a generar cambios reales y sostenibles en el tiempo.`}
       });
       await irATurnos(from); // 👈 CAMBIO ACA
     }
@@ -379,7 +379,7 @@ Una vez realizado el pago, por favor enviá:
         messaging_product:"whatsapp",
         to:from,
         text:{ body:
-`✨ Modalidades de atención disponibles:
+`✨ *Modalidades de atención disponibles:*
 
 • Virtual (Martes)
 • Presencial en Monte Grande (Lunes y Miércoles)
