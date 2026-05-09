@@ -289,7 +289,7 @@ Una vez realizado el pago, por favor enviá:
         messaging_product:"whatsapp",
         to:from,
         text:{ body:
-`💲 El valor de la sesión es de $37.000, que podés abonarlos por transferencia o en efectivo
+`💲 El valor de la sesión es de $37.000, que podés abonarlos por transferencia o en efectivo.
 
 ✔️ La reserva del turno se realiza con una seña del 50% mediante transferencia.
 
@@ -307,8 +307,8 @@ Una vez realizado el pago, por favor enviá:
 `✨ Modalidades de atención disponibles:
 
 • Virtual (Martes)
-• Monte Grande (Lunes y Miércoles)
-• 9 de Abril (Jueves)
+• Presencial en Monte Grande (Lunes y Miércoles)
+• Presencial en 9 de Abril (Jueves)
 
 ✔️ Atención psicológica para adolescentes (15+) y adultos.`}
       });
