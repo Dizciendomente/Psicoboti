@@ -7,6 +7,8 @@ app.use(express.json());
 const token = process.env.WHATSAPP_TOKEN;
 const phoneNumberId = process.env.PHONE_NUMBER_ID;
 
+const pacientesActivos = new Set();
+
 app.get("/", (req, res) => res.send("Bot alive"));
 
 /* VERIFICACION WEBHOOK */
@@ -158,6 +160,14 @@ Voy a chequear el pago y en breve te confirmo el turno por este medio.
     }
 
     if (text && !btn) {
+
+  // 👉 si es paciente, no respondemos
+  if (pacientesActivos.has(from)) {
+    return res.sendStatus(200);
+  }
+
+  // 👉 si no es paciente, mostramos menú
+  await sendMainMenu(from);
   return res.sendStatus(200);
 }
 
@@ -189,6 +199,8 @@ if (btn === "nuevo") {
 
     /* USUARIO PACIENTE */
 if (btn === "paciente") {
+  pacientesActivos.add(from);
+  
   await sendMessage({
     messaging_product:"whatsapp",
     to:from,
