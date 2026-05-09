@@ -186,7 +186,7 @@ if (btn === "nuevo") {
       body: {
         text: `Gracias por escribir 😊
         
-          Podés elegir una opción para continuar 👇🏼`
+        Podés elegir una opción para continuar 👇🏼`
       },
       action: {
         buttons: [
@@ -221,7 +221,7 @@ if (btn === "otros") {
     type:"interactive",
     interactive:{
       type:"button",
-      body:{ text:"Elegí entre estas opciones 👇🏼" },
+      body:{ text:"Podes elegir entre estas otras opciones 👇🏼" },
       action:{ buttons:[
         { type:"reply", reply:{ id:"honorarios", title:"💲 Precio"} },
         { type:"reply", reply:{ id:"asesor", title:"💬 Hablar con Flor"} },
