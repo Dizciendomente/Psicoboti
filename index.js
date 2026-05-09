@@ -63,19 +63,19 @@ async function sendMainMenu(to) {
       type: "button",
       body: {
         text:
-` ✨ ¡Bienvenido/a a Dizciendomente Psicología! Ψ ✨
+`✨ ¡Bienvenido/a a Dizciendomente Psicología! Ψ 
 
-Gracias por comunicarte😊  
+  Gracias por comunicarte! 😊  
 
-Estoy acá para ayudarte con información y para coordinar tu primera sesión.
+  Estoy acá para ayudarte con información y para coordinar tu primera sesión.
 
-Podés elegir una opción para continuar 👇🏼`
+  Podés elegir una opción para continuar 👇🏼`
       },
       action: {
         buttons: [
-          { type: "reply", reply: { id: "turno", title: "Reservar turno" } },
-          { type: "reply", reply: { id: "honorarios", title: "Honorarios" } },
-          { type: "reply", reply: { id: "modalidad", title: "Modalidades" } }
+          { type: "reply", reply: { id: "turno", title: "📅 Reservar turno" } },
+          { type: "reply", reply: { id: "honorarios", title: "💲 Honorarios" } },
+          { type: "reply", reply: { id: "modalidad", title: "✨ Modalidades" } }
         ]
       }
     }
@@ -162,11 +162,11 @@ Si todo esta ok, ya queda confirmado!
         interactive:{
           type:"button",
           body:{ text:
-`🔹Las sesiones tienen una duración aproximada de 40 a 45 minutos.
-
+`🔹Las sesiones tienen una duración aproximada de 40 a 45 minutos. 
+    
 🔹Es un espacio cuidado, pensado para acompañarte de forma personalizada en tu proceso.
 
-Podes elegir la modalidad 👇🏼`},
+    Podes elegir la modalidad 👇🏼`},
           action:{buttons:[
             { type:"reply", reply:{ id:"virtual", title:"👩🏼‍💻Sesión virtual"} },
             { type:"reply", reply:{ id:"presencial", title:"🙍🏼‍♀️Sesión presencial"} }
@@ -183,9 +183,9 @@ Podes elegir la modalidad 👇🏼`},
         interactive:{
           type:"button",
           body:{ text:
-            `💻 Turnos virtuales - dias Martes:
+            ` 💻 Turnos virtuales - dias Martes
             
-            Podés elegir el horario que mejor te quede👇🏼`
+          Podés elegir el horario que mejor te quede👇🏼`
                },
           action:{buttons:[
             { type:"reply", reply:{ id:"v10", title:"📅 10:00"} },
