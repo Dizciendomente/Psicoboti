@@ -74,7 +74,7 @@ Podés elegir una opción para continuar 👇🏼`
       action: {
         buttons: [
           { type: "reply", reply: { id: "turno", title: "📅 Reservar turno" } },
-          { type: "reply", reply: { id: "honorarios", title: "💲 Honorarios" } },
+          { type: "reply", reply: { id: "honorarios", title: "💲 Precio" } },
           { type: "reply", reply: { id: "modalidad", title: "✨ Modalidades" } }
         ]
       }
