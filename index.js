@@ -182,8 +182,8 @@ Voy a chequear el pago y en breve te confirmo el turno por este medio.
 
 Podés elegir la modalidad 👇🏼`},
           action:{buttons:[
-            { type:"reply", reply:{ id:"virtual", title:"👩🏼‍💻 Sesiones Virtuales"} },
-            { type:"reply", reply:{ id:"presencial", title:"🙍🏼‍♀️ Sesiones Presenciales"} }
+            { type:"reply", reply:{ id:"virtual", title:"👩🏼‍💻 Sesion Virtual"} },
+            { type:"reply", reply:{ id:"presencial", title:"🙍🏼‍♀️ Sesion Presencial"} }
           ]}
         }
       });
