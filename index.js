@@ -69,14 +69,14 @@ async function sendMainMenu(to) {
 
 Gracias por comunicarte 😊  
 
-Estoy acá para ayudarte con información y para coordinar tu primera sesión.
+Estoy acá para ayudarte con información y/o para coordinar tu primera sesión.
 
 Podés elegir una opción para continuar 👇🏼`
       },
       action: {
   buttons: [
     { type: "reply", reply: { id: "paciente", title: "👤 Soy paciente" } },
-    { type: "reply", reply: { id: "nuevo", title: "✨ Soy nuevo" } }
+    { type: "reply", reply: { id: "nuevo", title: "✨ Soy nuevo/a" } }
   ]
 }
     }
@@ -185,6 +185,7 @@ if (btn === "nuevo") {
       type: "button",
       body: {
         text: `Gracias por escribir 😊
+        
           Podés elegir una opción para continuar 👇🏼`
       },
       action: {
