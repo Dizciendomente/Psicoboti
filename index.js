@@ -113,7 +113,7 @@ async function volverMenu(to){
     type: "interactive",
     interactive:{
       type:"button",
-      body:{ text:"🔙 ¿Querés volver al menú principal?" },
+      body:{ text:"🔙 ¿Querés volver atrás?" },
       action:{ buttons:[
         { type:"reply", reply:{ id:"menu_nuevo", title:"↩️ Menú principal"}}
       ]}
