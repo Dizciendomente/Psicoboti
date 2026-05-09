@@ -199,9 +199,9 @@ Podés elegir la modalidad 👇🏼`},
           body:{ text:`💻 Turnos virtuales - días Martes
           \nPodés elegir el horario que mejor te quede! 👇🏼`},
           action:{buttons:[
-            { type:"reply", reply:{ id:"v10", title:"10:00"} },
-            { type:"reply", reply:{ id:"v14", title:"14:00"} },
-            { type:"reply", reply:{ id:"v15", title:"15:00"} }
+            { type:"reply", reply:{ id:"v10", title:"📅 10:00 hs"} },
+            { type:"reply", reply:{ id:"v14", title:"📅 14:00 hs"} },
+            { type:"reply", reply:{ id:"v15", title:"📅 15:00 hs"} }
           ]}
         }
       });
@@ -235,7 +235,7 @@ Podés elegir la modalidad 👇🏼`},
             Las Heras 557, Monte Grande
             \nElegí el día y horario disponible 👇🏼`},
           action:{buttons:[
-            { type:"reply", reply:{ id:"l16", title:"📅 Lunes 16:oo hs"} },
+            { type:"reply", reply:{ id:"l16", title:"📅 Lunes 16:00 hs"} },
             { type:"reply", reply:{ id:"m17", title:"📅 Miércoles 17:00hs"} }
           ]}
         }
@@ -250,7 +250,7 @@ Podés elegir la modalidad 👇🏼`},
         interactive:{
           type:"button",
           body:{ text:
-            `Consultorio Restelli
+            `🔹Consultorio Restelli
             Restelli 1159 "B", Barrio 9 de Abril
             
             \nElegí el día y horario disponible 👇🏼`},
