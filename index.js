@@ -37,7 +37,7 @@ async function sendMessage(body) {
   );
 }
 
-/* NUEVO: DESCARGAR MEDIA (imagen o pdf) */
+/* DESCARGAR MEDIA */
 async function getMediaUrl(mediaId){
   const res = await axios.get(
     `https://graph.facebook.com/v18.0/${mediaId}`,
@@ -65,11 +65,11 @@ async function sendMainMenu(to) {
         text:
 `✨ ¡Bienvenido/a a Dizciendomente Psicología! Ψ 
 
-  Gracias por comunicarte! 😊  
+Gracias por comunicarte 😊  
 
-  Estoy acá para ayudarte con información y para coordinar tu primera sesión.
+Estoy acá para ayudarte con información y para coordinar tu primera sesión.
 
-  Podés elegir una opción para continuar 👇🏼`
+Podés elegir una opción para continuar 👇🏼`
       },
       action: {
         buttons: [
@@ -98,6 +98,22 @@ async function volverMenu(to){
   })
 }
 
+/* NUEVO BOTON IR A TURNOS */
+async function irATurnos(to){
+  await sendMessage({
+    messaging_product:"whatsapp",
+    to,
+    type:"interactive",
+    interactive:{
+      type:"button",
+      body:{ text:"📅 ¿Querés reservar un turno?" },
+      action:{ buttons:[
+        { type:"reply", reply:{ id:"turno", title:"📅 Reservar turno"}}
+      ]}
+    }
+  })
+}
+
 /* WEBHOOK */
 app.post("/webhook", async (req, res) => {
   try {
@@ -114,7 +130,6 @@ app.post("/webhook", async (req, res) => {
     const btn = message?.interactive?.button_reply?.id;
     const text = message?.text?.body;
 
-    /* ⭐ NUEVO: DETECTAR COMPROBANTE (imagen o PDF) */
     const image = message?.image;
     const documentFile = message?.document;
 
@@ -129,12 +144,11 @@ app.post("/webhook", async (req, res) => {
           messaging_product:"whatsapp",
           to:from,
           text:{ body:
-`✅Comprobante recibido 
+`✅ Comprobante recibido 
 
-Voy a chequear el ingreso del pago y en breve te confirmo el turno por este medio.
-Si todo esta ok, ya queda confirmado!
+Voy a chequear el pago y en breve te confirmo el turno por este medio.
 
-¡Muchas Gracias!😊`}
+¡Muchas gracias! 😊`}
         });
 
       } catch(err){
@@ -153,7 +167,7 @@ Si todo esta ok, ya queda confirmado!
       await sendMainMenu(from);
     }
 
-    /* RESERVAR TURNO */
+    /* TURNOS */
     if (btn === "turno") {
       await sendMessage({
         messaging_product:"whatsapp",
@@ -162,14 +176,14 @@ Si todo esta ok, ya queda confirmado!
         interactive:{
           type:"button",
           body:{ text:
-`🔹Las sesiones tienen una duración aproximada de 40 a 45 minutos. 
-    
-🔹Es un espacio cuidado, pensado para acompañarte de forma personalizada en tu proceso.
+`🔹Las sesiones duran 40 a 45 minutos. 
 
-    Podes elegir la modalidad 👇🏼`},
+Es un espacio cuidado y personalizado.
+
+Elegí la modalidad 👇🏼`},
           action:{buttons:[
-            { type:"reply", reply:{ id:"virtual", title:"👩🏼‍💻Sesión virtual"} },
-            { type:"reply", reply:{ id:"presencial", title:"🙍🏼‍♀️Sesión presencial"} }
+            { type:"reply", reply:{ id:"virtual", title:"👩🏼‍💻 Virtual"} },
+            { type:"reply", reply:{ id:"presencial", title:"🙍🏼‍♀️ Presencial"} }
           ]}
         }
       });
@@ -182,15 +196,11 @@ Si todo esta ok, ya queda confirmado!
         type:"interactive",
         interactive:{
           type:"button",
-          body:{ text:
-            ` 💻  Turnos virtuales - dias Martes
-            
-            Podés elegir el horario que mejor te quede👇🏼`
-               },
+          body:{ text:`💻 Turnos virtuales - Martes\nElegí horario 👇🏼`},
           action:{buttons:[
-            { type:"reply", reply:{ id:"v10", title:"📅 10:00"} },
-            { type:"reply", reply:{ id:"v14", title:"📅 14:00"} },
-            { type:"reply", reply:{ id:"v15", title:"📅 15:00"} }
+            { type:"reply", reply:{ id:"v10", title:"10:00"} },
+            { type:"reply", reply:{ id:"v14", title:"14:00"} },
+            { type:"reply", reply:{ id:"v15", title:"15:00"} }
           ]}
         }
       });
@@ -203,10 +213,10 @@ Si todo esta ok, ya queda confirmado!
         type:"interactive",
         interactive:{
           type:"button",
-          body:{ text:"Elegí el consultorio más cercano a vos! 👇🏼:" },
+          body:{ text:"Elegí consultorio 👇🏼" },
           action:{buttons:[
-            { type:"reply", reply:{ id:"mg", title:"📍Monte Grande"} },
-            { type:"reply", reply:{ id:"abril", title:"📍9 de Abril"} }
+            { type:"reply", reply:{ id:"mg", title:"Monte Grande"} },
+            { type:"reply", reply:{ id:"abril", title:"9 de Abril"} }
           ]}
         }
       });
@@ -219,15 +229,10 @@ Si todo esta ok, ya queda confirmado!
         type:"interactive",
         interactive:{
           type:"button",
-          body:{ text:
-          `🔹Espacio Retravallier
-          Las Heras 557, Monte Grande
-          
-          Elegí el día y horario disponible 👇🏼`
-               },
+          body:{ text:`Monte Grande\nElegí horario 👇🏼`},
           action:{buttons:[
-            { type:"reply", reply:{ id:"l16", title:"📅 Lunes 16:00 hs"} },
-            { type:"reply", reply:{ id:"m17", title:"📅 Miércoles 17:00 hs"} }
+            { type:"reply", reply:{ id:"l16", title:"Lunes 16"} },
+            { type:"reply", reply:{ id:"m17", title:"Miércoles 17"} }
           ]}
         }
       });
@@ -240,15 +245,10 @@ Si todo esta ok, ya queda confirmado!
         type:"interactive",
         interactive:{
           type:"button",
-          body:{ text:
-            `🔹Consultorio Restelli 
-            Restelli 1159 "B", Barrio 9 de Abril.
-            
-            Elegí el día y horario disponible 👇🏼`
-             },
+          body:{ text:`9 de Abril\nElegí horario 👇🏼`},
           action:{buttons:[
-            { type:"reply", reply:{ id:"j16", title:"📅 Jueves 16:00 hs"} },
-            { type:"reply", reply:{ id:"j17", title:"📅 Jueves 17:00 hs"} }
+            { type:"reply", reply:{ id:"j16", title:"Jueves 16"} },
+            { type:"reply", reply:{ id:"j17", title:"Jueves 17"} }
           ]}
         }
       });
@@ -260,53 +260,49 @@ Si todo esta ok, ya queda confirmado!
         messaging_product:"whatsapp",
         to:from,
         text:{ body:
-`✨ Para confirmar el turno se realiza una seña del 50% ($18.500).
+`✨ Para confirmar el turno se abona el 50% ($18.500)
 
 Alias: dizciendomente.psi
 
-Una vez realizado el pago, por favor enviá:
-• Nombre y apellido del paciente
+Enviá:
+• Nombre
 • Edad  
-• Motivo de consulta  
-• Comprobante de transferencia  
-
-Con esto el turno queda confirmado.`}
+• Motivo  
+• Comprobante`}
       });
       await volverMenu(from);
     }
 
+    /* HONORARIOS */
     if (btn === "honorarios") {
       await sendMessage({
         messaging_product:"whatsapp",
         to:from,
         text:{ body:
-`💲 El valor de la sesión es de $37.000, que podés abonarlos por transferencia o en efectivo
+`💲 La sesión tiene un valor de $37.000
 
-✔️ La reserva del turno se realiza con una seña del 50% mediante transferencia.
+La reserva se realiza con el 50%.
 
-      Es un espacio individual, confidencial y personalizado, orientado a generar cambios reales y sostenibles en el tiempo.
-
-↩️ Para reservarlo volvé al menú principal.`
-             }
+Es un espacio confidencial y personalizado.`}
       });
-      await volverMenu(from);
+      await irATurnos(from); // 👈 CAMBIO ACA
     }
 
+    /* MODALIDADES */
     if (btn === "modalidad") {
       await sendMessage({
         messaging_product:"whatsapp",
         to:from,
         text:{ body:
-`✨Modalidades de atención diponibles:.
+`✨ Modalidades:
 
-• Virtual: días Martes.
-• Presencial Monte Grande: Lunes y Miércoles
-• Presencial 9 de Abril: Jueves
+• Virtual (Martes)
+• Monte Grande (Lunes y Miércoles)
+• 9 de Abril (Jueves)
 
-✔️Atención psicológica para adolescentes (15+) y adultos`
-             }
+Atención adolescentes y adultos`}
       });
-      await volverMenu(from);
+      await irATurnos(from); // 👈 CAMBIO ACA
     }
 
     res.sendStatus(200);
