@@ -176,14 +176,14 @@ Voy a chequear el pago y en breve te confirmo el turno por este medio.
         interactive:{
           type:"button",
           body:{ text:
-`🔹Las sesiones duran 40 a 45 minutos. 
+`⏳ Las sesiones tienen una duración aproximada de 40 a 45 minutos. 
 
-Es un espacio cuidado y personalizado.
+✔️ Es un espacio cuidado, pensado para acompañarte de forma personalizada en tu proceso
 
-Elegí la modalidad 👇🏼`},
+Podés elegir la modalidad 👇🏼`},
           action:{buttons:[
-            { type:"reply", reply:{ id:"virtual", title:"👩🏼‍💻 Virtual"} },
-            { type:"reply", reply:{ id:"presencial", title:"🙍🏼‍♀️ Presencial"} }
+            { type:"reply", reply:{ id:"virtual", title:"👩🏼‍💻 Sesiones Virtuales"} },
+            { type:"reply", reply:{ id:"presencial", title:"🙍🏼‍♀️ Sesiones Presenciales"} }
           ]}
         }
       });
@@ -196,7 +196,8 @@ Elegí la modalidad 👇🏼`},
         type:"interactive",
         interactive:{
           type:"button",
-          body:{ text:`💻 Turnos virtuales - Martes\nElegí horario 👇🏼`},
+          body:{ text:`💻 Turnos virtuales - días Martes
+          \nPodés elegir el horario que mejor te quede! 👇🏼`},
           action:{buttons:[
             { type:"reply", reply:{ id:"v10", title:"10:00"} },
             { type:"reply", reply:{ id:"v14", title:"14:00"} },
@@ -213,10 +214,10 @@ Elegí la modalidad 👇🏼`},
         type:"interactive",
         interactive:{
           type:"button",
-          body:{ text:"Elegí consultorio 👇🏼" },
+          body:{ text:"Elegí el consultorio más cercano a vos! 👇🏼" },
           action:{buttons:[
-            { type:"reply", reply:{ id:"mg", title:"Monte Grande"} },
-            { type:"reply", reply:{ id:"abril", title:"9 de Abril"} }
+            { type:"reply", reply:{ id:"mg", title:"📍 Monte Grande"} },
+            { type:"reply", reply:{ id:"abril", title:"📍 9 de Abril"} }
           ]}
         }
       });
@@ -229,10 +230,13 @@ Elegí la modalidad 👇🏼`},
         type:"interactive",
         interactive:{
           type:"button",
-          body:{ text:`Monte Grande\nElegí horario 👇🏼`},
+          body:{ text:
+            `🔹Espacio Retravallier
+            Las Heras 557, Monte Grande
+            \nElegí el día y horario disponible 👇🏼`},
           action:{buttons:[
-            { type:"reply", reply:{ id:"l16", title:"Lunes 16"} },
-            { type:"reply", reply:{ id:"m17", title:"Miércoles 17"} }
+            { type:"reply", reply:{ id:"l16", title:"📅 Lunes 16:oo hs"} },
+            { type:"reply", reply:{ id:"m17", title:"📅 Miércoles 17:00hs"} }
           ]}
         }
       });
@@ -245,10 +249,14 @@ Elegí la modalidad 👇🏼`},
         type:"interactive",
         interactive:{
           type:"button",
-          body:{ text:`9 de Abril\nElegí horario 👇🏼`},
+          body:{ text:
+            `Consultorio Restelli
+            Restelli 1159 "B", Barrio 9 de Abril
+            
+            \nElegí el día y horario disponible 👇🏼`},
           action:{buttons:[
-            { type:"reply", reply:{ id:"j16", title:"Jueves 16"} },
-            { type:"reply", reply:{ id:"j17", title:"Jueves 17"} }
+            { type:"reply", reply:{ id:"j16", title:"📅 Jueves 16:00 hs"} },
+            { type:"reply", reply:{ id:"j17", title:"📅 Jueves 17:00 hs"} }
           ]}
         }
       });
@@ -264,11 +272,13 @@ Elegí la modalidad 👇🏼`},
 
 Alias: dizciendomente.psi
 
-Enviá:
-• Nombre
+Una vez realizado el pago, por favor enviá:
+• Nombre y apellido del paciente
 • Edad  
-• Motivo  
-• Comprobante`}
+• Motivo de inicio de terapia
+• Comprobante de transferencia
+
+✔️ Con esto la reserva queda confirmada`}
       });
       await volverMenu(from);
     }
@@ -279,11 +289,11 @@ Enviá:
         messaging_product:"whatsapp",
         to:from,
         text:{ body:
-`💲 La sesión tiene un valor de $37.000
+`💲 El valor de la sesión es de $37.000, que podés abonarlos por transferencia o en efectivo
 
-La reserva se realiza con el 50%.
+✔️ La reserva del turno se realiza con una seña del 50% mediante transferencia.
 
-Es un espacio confidencial y personalizado.`}
+🫂 Es un espacio individual, confidencial y personalizado, orientado a generar cambios reales y sostenibles en el tiempo.`}
       });
       await irATurnos(from); // 👈 CAMBIO ACA
     }
@@ -294,13 +304,13 @@ Es un espacio confidencial y personalizado.`}
         messaging_product:"whatsapp",
         to:from,
         text:{ body:
-`✨ Modalidades:
+`✨ Modalidades de atención disponibles:
 
 • Virtual (Martes)
 • Monte Grande (Lunes y Miércoles)
 • 9 de Abril (Jueves)
 
-Atención adolescentes y adultos`}
+✔️ Atención psicológica para adolescentes (15+) y adultos.`}
       });
       await irATurnos(from); // 👈 CAMBIO ACA
     }
