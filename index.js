@@ -72,12 +72,11 @@ Estoy acá para ayudarte con información y para coordinar tu primera sesión.
 Podés elegir una opción para continuar 👇🏼`
       },
       action: {
-        buttons: [
-          { type: "reply", reply: { id: "turno", title: "📅 Reservar turno" } },
-          { type: "reply", reply: { id: "modalidad", title: "✨ Modalidades" } },
-          { type: "reply", reply: { id: "otros", title: "➕ Otras consultas" } }
-        ]
-      }
+  buttons: [
+    { type: "reply", reply: { id: "paciente", title: "👤 Soy paciente" } },
+    { type: "reply", reply: { id: "nuevo", title: "✨ Soy nuevo" } }
+  ]
+}
     }
   });
 }
@@ -158,14 +157,47 @@ Voy a chequear el pago y en breve te confirmo el turno por este medio.
       return res.sendStatus(200);
     }
 
-    if (text) {
-      await sendMainMenu(from);
-      return res.sendStatus(200);
-    }
+    if (text && !btn) {
+  return res.sendStatus(200);
+}
 
     if (btn === "menu") {
       await sendMainMenu(from);
     }
+
+    /* USUARIO NUEVO */
+if (btn === "nuevo") {
+  await sendMessage({
+    messaging_product: "whatsapp",
+    to: from,
+    type: "interactive",
+    interactive: {
+      type: "button",
+      body: {
+        text: "Podés elegir una opción para continuar 👇🏼"
+      },
+      action: {
+        buttons: [
+          { type: "reply", reply: { id: "turno", title: "📅 Reservar turno" } },
+          { type: "reply", reply: { id: "modalidad", title: "✨ Modalidades" } },
+          { type: "reply", reply: { id: "otros", title: "➕ Otros temas" } }
+        ]
+      }
+    }
+  });
+}
+
+    /* USUARIO PACIENTE */
+if (btn === "paciente") {
+  await sendMessage({
+    messaging_product:"whatsapp",
+    to:from,
+    text:{ body:
+`Perfecto 😊
+
+Podés escribirme por acá lo que necesites y te respondo a la brevedad.`}
+  });
+}
     
 /* OTROS TEMAS */
 if (btn === "otros") {
