@@ -74,8 +74,8 @@ Podés elegir una opción para continuar 👇🏼`
       action: {
         buttons: [
           { type: "reply", reply: { id: "turno", title: "📅 Reservar turno" } },
-          { type: "reply", reply: { id: "honorarios", title: "💲 Precio" } },
-          { type: "reply", reply: { id: "modalidad", title: "✨ Modalidades" } }
+          { type: "reply", reply: { id: "modalidad", title: "✨ Modalidades" } },
+          { type: "reply", reply: { id: "otros", title: "➕ Otras consultas" } }
         ]
       }
     }
@@ -166,7 +166,36 @@ Voy a chequear el pago y en breve te confirmo el turno por este medio.
     if (btn === "menu") {
       await sendMainMenu(from);
     }
+    
+/* OTROS TEMAS */
+if (btn === "otros") {
+  await sendMessage({
+    messaging_product:"whatsapp",
+    to:from,
+    type:"interactive",
+    interactive:{
+      type:"button",
+      body:{ text:"Elegí entre estas opciones 👇🏼" },
+      action:{ buttons:[
+        { type:"reply", reply:{ id:"honorarios", title:"💲 Precio"} },
+        { type:"reply", reply:{ id:"asesor", title:"💬 Hablar con Flor"} },
+        { type:"reply", reply:{ id:"menu", title:"🔙 Volver"} }
+      ]}
+    }
+  });
+}
+    /* HABLAR CON ASESOR */
+if (btn === "asesor") {
+  await sendMessage({
+    messaging_product:"whatsapp",
+    to:from,
+    text:{ body:
+`Podés escribirme tu consulta por acá 😊
 
+En breve te voy a estar respondiendo personalmente.`}
+  });
+}
+    
     /* TURNOS */
     if (btn === "turno") {
       await sendMessage({
