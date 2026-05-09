@@ -53,8 +53,8 @@ Puedo ayudarte con información o con la reserva de tu primera sesión.`
       action: {
         buttons: [
           { type: "reply", reply: { id: "turno", title: "Reservar turno" } },
-          { type: "reply", reply: { id: "honorarios", title: "Valor de la Sesión" } },
-          { type: "reply", reply: { id: "modalidad", title: "Modalidades disponibles" } }
+          { type: "reply", reply: { id: "honorarios", title: "Honorarios" } },
+          { type: "reply", reply: { id: "modalidad", title: "Modalidades" } }
         ]
       }
     }
