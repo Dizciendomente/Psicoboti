@@ -183,9 +183,9 @@ Si todo esta ok, ya queda confirmado!
         interactive:{
           type:"button",
           body:{ text:
-            ` 💻 Turnos virtuales - dias Martes
+            ` 💻  Turnos virtuales - dias Martes
             
-          Podés elegir el horario que mejor te quede👇🏼`
+            Podés elegir el horario que mejor te quede👇🏼`
                },
           action:{buttons:[
             { type:"reply", reply:{ id:"v10", title:"📅 10:00"} },
