@@ -37,6 +37,22 @@ async function sendMessage(body) {
   );
 }
 
+/* NUEVO: DESCARGAR MEDIA (imagen o pdf) */
+async function getMediaUrl(mediaId){
+  const res = await axios.get(
+    `https://graph.facebook.com/v18.0/${mediaId}`,
+    { headers:{ Authorization:`Bearer ${token}` } }
+  );
+  return res.data.url;
+}
+
+async function downloadMedia(url){
+  return axios.get(url,{
+    headers:{ Authorization:`Bearer ${token}` },
+    responseType:"arraybuffer"
+  });
+}
+
 /* MENU PRINCIPAL */
 async function sendMainMenu(to) {
   await sendMessage({
@@ -93,6 +109,33 @@ app.post("/webhook", async (req, res) => {
     const btn = message?.interactive?.button_reply?.id;
     const text = message?.text?.body;
 
+    /* ⭐ NUEVO: DETECTAR COMPROBANTE (imagen o PDF) */
+    const image = message?.image;
+    const documentFile = message?.document;
+
+    if (image || documentFile) {
+      const mediaId = image?.id || documentFile?.id;
+
+      try {
+        const url = await getMediaUrl(mediaId);
+        await downloadMedia(url);
+
+        await sendMessage({
+          messaging_product:"whatsapp",
+          to:from,
+          text:{ body:
+`Comprobante recibido ✅
+
+En breve reviso el pago y te confirmo el turno por este medio. Gracias 😊`}
+        });
+
+      } catch(err){
+        console.log("Error descargando media", err.message);
+      }
+
+      return res.sendStatus(200);
+    }
+
     if (text) {
       await sendMainMenu(from);
       return res.sendStatus(200);
@@ -123,7 +166,6 @@ Elegí la modalidad:`},
       });
     }
 
-    /* VIRTUAL */
     if (btn === "virtual") {
       await sendMessage({
         messaging_product:"whatsapp",
@@ -141,7 +183,6 @@ Elegí la modalidad:`},
       });
     }
 
-    /* PRESENCIAL */
     if (btn === "presencial") {
       await sendMessage({
         messaging_product:"whatsapp",
@@ -211,7 +252,6 @@ Una vez recibido, el turno queda confirmado.`}
       await volverMenu(from);
     }
 
-    /* HONORARIOS */
     if (btn === "honorarios") {
       await sendMessage({
         messaging_product:"whatsapp",
@@ -226,7 +266,6 @@ La reserva del turno se realiza con una seña del 50%.`}
       await volverMenu(from);
     }
 
-    /* MODALIDAD */
     if (btn === "modalidad") {
       await sendMessage({
         messaging_product:"whatsapp",
