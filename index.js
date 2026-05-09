@@ -63,8 +63,10 @@ async function sendMainMenu(to) {
       type: "button",
       body: {
         text:
-`Hola 😊 Soy el asistente de Psicoboti.
-Puedo ayudarte con información o con la reserva de tu primera sesión.`
+`✨ ¡Bienvenido/a a Dizciendomente Psicología! Ψ ✨
+Gracias por comunicarte😊 
+Estoy acá para ayudarte con información y para coordinar tu primera sesión.
+Podés elegir una opción para continuar 👇🏼`
       },
       action: {
         buttons: [
@@ -85,9 +87,9 @@ async function volverMenu(to){
     type: "interactive",
     interactive:{
       type:"button",
-      body:{ text:"¿Querés volver al menú principal?" },
+      body:{ text:"🔙 ¿Querés volver al menú principal?" },
       action:{ buttons:[
-        { type:"reply", reply:{ id:"menu", title:"Menú principal"}}
+        { type:"reply", reply:{ id:"menu", title:"↩️ Menú principal"}}
       ]}
     }
   })
@@ -124,9 +126,12 @@ app.post("/webhook", async (req, res) => {
           messaging_product:"whatsapp",
           to:from,
           text:{ body:
-`Comprobante recibido ✅
+`✅Comprobante recibido 
 
-En breve reviso el pago y te confirmo el turno por este medio. Gracias 😊`}
+Voy a chequear el ingreso del pago y en breve te confirmo el turno por este medio.
+Si todo esta ok, ya queda confirmado!
+
+¡Muchas Gracias!😊`}
         });
 
       } catch(err){
@@ -154,13 +159,13 @@ En breve reviso el pago y te confirmo el turno por este medio. Gracias 😊`}
         interactive:{
           type:"button",
           body:{ text:
-`Las sesiones tienen una duración aproximada de 40 a 45 minutos.
-Trabajamos con un espacio cuidado y personalizado para cada proceso.
+`🔹Las sesiones tienen una duración aproximada de 40 a 45 minutos.
+🔹Es un espacio cuidado, pensado para acompañarte de forma personalizada en tu proceso.
 
-Elegí la modalidad:`},
+Podes elegir la modalidad 👇🏼`},
           action:{buttons:[
-            { type:"reply", reply:{ id:"virtual", title:"Sesión virtual"} },
-            { type:"reply", reply:{ id:"presencial", title:"Sesión presencial"} }
+            { type:"reply", reply:{ id:"virtual", title:"👩🏼‍💻Sesión virtual"} },
+            { type:"reply", reply:{ id:"presencial", title:"🙍🏼‍♀️Sesión presencial"} }
           ]}
         }
       });
@@ -173,11 +178,14 @@ Elegí la modalidad:`},
         type:"interactive",
         interactive:{
           type:"button",
-          body:{ text:"Turnos virtuales disponibles (martes):" },
+          body:{ text:
+            `💻Turnos virtuales - dias Martes:
+            Podés elegir el horario que mejor te quede👇🏼`
+               },
           action:{buttons:[
-            { type:"reply", reply:{ id:"v10", title:"10:00"} },
-            { type:"reply", reply:{ id:"v14", title:"14:00"} },
-            { type:"reply", reply:{ id:"v15", title:"15:00"} }
+            { type:"reply", reply:{ id:"v10", title:"📅 10:00"} },
+            { type:"reply", reply:{ id:"v14", title:"📅 14:00"} },
+            { type:"reply", reply:{ id:"v15", title:"📅 15:00"} }
           ]}
         }
       });
@@ -190,10 +198,10 @@ Elegí la modalidad:`},
         type:"interactive",
         interactive:{
           type:"button",
-          body:{ text:"Elegí el consultorio:" },
+          body:{ text:"Elegí el consultorio más cercano a vos! 👇🏼:" },
           action:{buttons:[
-            { type:"reply", reply:{ id:"mg", title:"Monte Grande"} },
-            { type:"reply", reply:{ id:"abril", title:"9 de Abril"} }
+            { type:"reply", reply:{ id:"mg", title:"📍Monte Grande"} },
+            { type:"reply", reply:{ id:"abril", title:"📍9 de Abril"} }
           ]}
         }
       });
@@ -206,10 +214,15 @@ Elegí la modalidad:`},
         type:"interactive",
         interactive:{
           type:"button",
-          body:{ text:"Consultorio Monte Grande – Las Heras 557" },
+          body:{ text:
+          `🔹Espacio Retravallier
+          Las Heras 557, Monte Grande
+          
+          Elegí el día y horario disponible 👇🏼`
+               },
           action:{buttons:[
-            { type:"reply", reply:{ id:"l16", title:"Lunes 16:00"} },
-            { type:"reply", reply:{ id:"m17", title:"Miércoles 17:00"} }
+            { type:"reply", reply:{ id:"l16", title:"📅 Lunes 16:00 hs"} },
+            { type:"reply", reply:{ id:"m17", title:"📅 Miércoles 17:00 hs"} }
           ]}
         }
       });
@@ -222,10 +235,15 @@ Elegí la modalidad:`},
         type:"interactive",
         interactive:{
           type:"button",
-          body:{ text:"Consultorio 9 de Abril – Restelli 1159 B" },
+          body:{ text:
+            `🔹Consultorio Restelli 
+            Restelli 1159 "B", Barrio 9 de Abril.
+            
+            Elegí el día y horario disponible 👇🏼`
+             },
           action:{buttons:[
-            { type:"reply", reply:{ id:"j16", title:"Jueves 16:00"} },
-            { type:"reply", reply:{ id:"j17", title:"Jueves 17:00"} }
+            { type:"reply", reply:{ id:"j16", title:"📅 Jueves 16:00 hs"} },
+            { type:"reply", reply:{ id:"j17", title:"📅 Jueves 17:00 hs"} }
           ]}
         }
       });
@@ -237,17 +255,17 @@ Elegí la modalidad:`},
         messaging_product:"whatsapp",
         to:from,
         text:{ body:
-`✨ Para confirmar el turno se solicita una seña del 50% ($18.500).
+`✨ Para confirmar el turno se realiza una seña del 50% ($18.500).
 
 Alias: dizciendomente.psi
 
-Luego enviá:
-• Nombre y apellido  
+Una vez realizado el pago, por favor enviá:
+• Nombre y apellido del paciente
 • Edad  
 • Motivo de consulta  
 • Comprobante de transferencia  
 
-Una vez recibido, el turno queda confirmado.`}
+Con esto el turno queda confirmado.`}
       });
       await volverMenu(from);
     }
@@ -257,11 +275,14 @@ Una vez recibido, el turno queda confirmado.`}
         messaging_product:"whatsapp",
         to:from,
         text:{ body:
-`El valor de la sesión es de $37.000.
+`🔹El valor de la sesión es de $37.000, que podés abonarlos por transferencia o en efectivo
 
-Se trata de un espacio individual, confidencial y personalizado, orientado a generar cambios reales y sostenibles en el tiempo.
+🔹La reserva del turno se realiza con una seña del 50% mediante transferencia.
 
-La reserva del turno se realiza con una seña del 50%.`}
+🔹Es un espacio individual, confidencial y personalizado, orientado a generar cambios reales y sostenibles en el tiempo.
+
+🔹Para reservarlo volvé al menú principal.`
+             }
       });
       await volverMenu(from);
     }
@@ -271,12 +292,14 @@ La reserva del turno se realiza con una seña del 50%.`}
         messaging_product:"whatsapp",
         to:from,
         text:{ body:
-`Se brinda atención psicológica a adolescentes (15+) y adultos.
+`Modalidades de atención diponibles:.
 
-Modalidad virtual: martes.
-Modalidad presencial:
-• Monte Grande (lunes y miércoles)
-• 9 de Abril (jueves)`}
+• Virtual: días Martes.
+• Presencial Monte Grande: Lunes y Miércoles
+• Presencial 9 de Abril: Jueves
+
+Atención psicológica para adolescentes (15+) y adultos`
+             }
       });
       await volverMenu(from);
     }
